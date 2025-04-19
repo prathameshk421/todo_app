@@ -22,8 +22,11 @@ Router.post('/',validate_token,validate_task,(req,res)=>{
 })
 
 Router.get('/',validate_token,async (req,res)=>{
-    const tasks=await Task.find({user_id:req.user.user_id}).lean();
-    // console.log(tasks);
+    const status=req.query.status
+    const query={user_id:req.user.user_id}
+    if(status=="completed")query.completed=true;
+    else if(status=="uncompleted")query.completed=false;
+    const tasks=await Task.find(query);
     if(tasks){
         res.status(200).json({
             tasks
@@ -83,6 +86,7 @@ Router.put('/:id',validate_token,async (req,res)=>{
         })
     }
 })
+
 Router.put('/complete/:id',validate_token,async (req,res)=>{
     try{
         const done_task=await Task.findOneAndUpdate({
@@ -106,4 +110,5 @@ Router.put('/complete/:id',validate_token,async (req,res)=>{
         })
     }
 })
+
 module.exports=Router
