@@ -3,7 +3,10 @@ const {user_data_base}=require("../config/connect_to_database")
 const tasks_schema=new user_data_base.Schema({
     title:String,
     description:String,
-    completed:Boolean,
+    completed:{
+        type:Boolean,
+        default:false
+    },
     user_id:{
         type:user_data_base.Schema.Types.ObjectId,
         ref:"User"
